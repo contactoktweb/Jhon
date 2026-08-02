@@ -1,6 +1,70 @@
-export default function Page() {
+import { createClient } from '@/utils/supabase/server'
+import { cookies } from 'next/headers'
+
+export default async function Page() {
+  const cookieStore = await cookies()
+  const supabase = createClient(cookieStore)
+
+  // Consultar todas las tablas para inyectarlas en el frontend (Sustituyendo el mock local)
+  const [
+    { data: perfiles },
+    { data: referrals },
+    { data: solicitudes },
+    { data: retiros },
+    { data: utilidades },
+    { data: historial },
+    { data: notificaciones },
+    { data: escuela }
+  ] = await Promise.all([
+    supabase.from('profiles').select('*').order('fecha_registro', { ascending: false }),
+    supabase.from('referrals').select('*'),
+    supabase.from('solicitudes').select('*').order('fecha', { ascending: false }),
+    supabase.from('retiros').select('*').order('fecha', { ascending: false }),
+    supabase.from('utilidades').select('*').order('fecha', { ascending: false }),
+    supabase.from('historial').select('*').order('fecha', { ascending: false }),
+    supabase.from('notificaciones').select('*').order('created_at', { ascending: false }),
+    supabase.from('escuela').select('*')
+  ])
+
+  const usuarios = perfiles || []
+  
+  // Construir el árbol de referidos de forma recursiva (basado en referrals)
+  const buildTree = (userId: string): any => {
+    const user = usuarios.find(u => u.id === userId)
+    if (!user) return null
+    const children = (referrals || []).filter(r => r.referrer_id === userId).map(r => {
+      const child = buildTree(r.referred_id)
+      if (child) child.tipo = r.tipo
+      return child
+    }).filter(Boolean)
+    
+    return {
+      nombre: user.nombre,
+      id: user.id,
+      cupos: user.ref_count,
+      hijos: children
+    }
+  }
+
+  // Raíz del árbol: Laura Restrepo (la ID de prueba asignada en el script SQL)
+  const arbol = buildTree('00000000-0000-0000-0000-000000000002') || { nombre: "Sin red", id: "", cupos: 0, hijos: [] }
+
+  const initialDB = {
+    usuarios,
+    solicitudes: solicitudes || [],
+    retiros: retiros || [],
+    utilidades: utilidades || [],
+    historial: historial || [],
+    notificaciones: notificaciones || [],
+    escuela: escuela || [],
+    arbol,
+    festivos: ["2026-01-01 · Año Nuevo", "2026-01-06 · Reyes Magos", "2026-03-23 · San José", "2026-05-01 · Día del Trabajo"],
+    config: { gananciaPct: 2, moodle: "https://escuela.plataformainversion.co", wompi: "activo", moneda: "COP", retiroMin: 50000, retiroMax: 2000000 }
+  }
+
   return (
     <>
+      <script dangerouslySetInnerHTML={{ __html: `window.__INITIAL_DB__ = ${JSON.stringify(initialDB)};` }} />
       {/* ============ LOGIN ============ */}
       <div id="loginScreen" className="login-screen">
         <aside className="login-aside">

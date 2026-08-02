@@ -4,80 +4,9 @@
    ============================================================ */
 
 /* ---------------- Simulated data ---------------- */
-const DB = {
-  usuarios: [
-    { id: "U-1042", nombre: "Laura Restrepo", correo: "laura.r@correo.co", doc: "1.018.552.901", estado: "activo", ganancia: 500000, retorno: 320000, ref: 2, fecha: "2026-01-12", banco: "Bancolombia", cuenta: "•••• 4821", diplomado: "activo" },
-    { id: "U-1043", nombre: "Andrés Gómez", correo: "andres.g@correo.co", doc: "79.554.120", estado: "activo", ganancia: 800000, retorno: 512000, ref: 3, fecha: "2026-01-15", banco: "Davivienda", cuenta: "•••• 1190", diplomado: "activo" },
-    { id: "U-1044", nombre: "Marcela Díaz", correo: "marcela.d@correo.co", doc: "52.880.331", estado: "revision", ganancia: 0, retorno: 0, ref: 0, fecha: "2026-02-02", banco: "Nequi", cuenta: "•••• 7733", diplomado: "pendiente" },
-    { id: "U-1045", nombre: "Julián Pérez", correo: "julian.p@correo.co", doc: "1.090.221.554", estado: "pendiente", ganancia: 0, retorno: 0, ref: 1, fecha: "2026-02-08", banco: "BBVA", cuenta: "•••• 3201", diplomado: "pendiente" },
-    { id: "U-1046", nombre: "Sofía Naranjo", correo: "sofia.n@correo.co", doc: "43.118.776", estado: "activo", ganancia: 1200000, retorno: 768000, ref: 3, fecha: "2026-01-20", banco: "Bancolombia", cuenta: "•••• 9043", diplomado: "activo" },
-    { id: "U-1047", nombre: "Camilo Torres", correo: "camilo.t@correo.co", doc: "1.001.998.210", estado: "bloqueado", ganancia: 500000, retorno: 120000, ref: 0, fecha: "2025-12-28", banco: "Davivienda", cuenta: "•••• 5567", diplomado: "suspendido" },
-    { id: "U-1048", nombre: "Valentina Ruiz", correo: "valentina.r@correo.co", doc: "1.144.020.118", estado: "activo", ganancia: 500000, retorno: 295000, ref: 2, fecha: "2026-01-25", banco: "Nequi", cuenta: "•••• 2288", diplomado: "activo" },
-    { id: "U-1049", nombre: "Daniel Castaño", correo: "daniel.c@correo.co", doc: "98.221.665", estado: "revision", ganancia: 0, retorno: 0, ref: 0, fecha: "2026-02-10", banco: "BBVA", cuenta: "•••• 6612", diplomado: "pendiente" },
-  ],
-  solicitudes: [
-    { id: "GAN-3001", usuario: "Marcela Díaz", doc: "52.880.331", rut: "RUT-52880331", cuenta: "Nequi •••• 7733", estado: "pendiente", fecha: "2026-02-02" },
-    { id: "GAN-3002", usuario: "Julián Pérez", doc: "1.090.221.554", rut: "RUT-90221554", cuenta: "BBVA •••• 3201", estado: "pendiente", fecha: "2026-02-08" },
-    { id: "GAN-3003", usuario: "Daniel Castaño", doc: "98.221.665", rut: "RUT-98221665", cuenta: "BBVA •••• 6612", estado: "revision", fecha: "2026-02-10" },
-    { id: "GAN-3004", usuario: "Sofía Naranjo", doc: "43.118.776", rut: "RUT-43118776", cuenta: "Banco •••• 9043", estado: "aprobada", fecha: "2026-01-19" },
-    { id: "GAN-3005", usuario: "Andrés Gómez", doc: "79.554.120", rut: "RUT-79554120", cuenta: "Davivienda •••• 1190", estado: "aprobada", fecha: "2026-01-14" },
-    { id: "GAN-3006", usuario: "Pedro Lince", doc: "80.115.443", rut: "RUT-80115443", cuenta: "Nequi •••• 0098", estado: "rechazada", fecha: "2026-01-30" },
-  ],
-  retiros: [
-    { id: "RET-7001", usuario: "Laura Restrepo", monto: 120000, banco: "Bancolombia", cuenta: "•••• 4821", fecha: "2026-02-09", estado: "pendiente" },
-    { id: "RET-7002", usuario: "Andrés Gómez", monto: 200000, banco: "Davivienda", cuenta: "•••• 1190", fecha: "2026-02-08", estado: "proceso" },
-    { id: "RET-7003", usuario: "Sofía Naranjo", monto: 300000, banco: "Bancolombia", cuenta: "•••• 9043", fecha: "2026-02-05", estado: "pagado" },
-    { id: "RET-7004", usuario: "Valentina Ruiz", monto: 90000, banco: "Nequi", cuenta: "•••• 2288", fecha: "2026-02-04", estado: "pendiente" },
-    { id: "RET-7005", usuario: "Camilo Torres", monto: 50000, banco: "Davivienda", cuenta: "•••• 5567", fecha: "2026-02-01", estado: "rechazado" },
-  ],
-  utilidades: [
-    { dia: "Lunes", fecha: "2026-02-09", habil: true, valor: 12000, activos: 38, distribuido: 456000, obs: "Cierre normal" },
-    { dia: "Martes", fecha: "2026-02-10", habil: true, valor: 11500, activos: 39, distribuido: 448500, obs: "Cierre normal" },
-    { dia: "Miércoles", fecha: "2026-02-11", habil: true, valor: 12500, activos: 40, distribuido: 500000, obs: "Alta actividad" },
-    { dia: "Jueves", fecha: "2026-02-12", habil: true, valor: 11800, activos: 40, distribuido: 472000, obs: "Cierre normal" },
-    { dia: "Viernes", fecha: "2026-02-13", habil: true, valor: 12200, activos: 41, distribuido: 500200, obs: "Cierre normal" },
-    { dia: "Sábado", fecha: "2026-02-14", habil: false, valor: 0, activos: 0, distribuido: 0, obs: "No hábil" },
-    { dia: "Domingo", fecha: "2026-02-15", habil: false, valor: 0, activos: 0, distribuido: 0, obs: "No hábil" },
-  ],
-  escuela: [
-    { usuario: "Laura Restrepo", diplomado: "Diplomado en Gestión Financiera", pago: "pagado", fecha: "2026-01-12", acceso: "activo" },
-    { usuario: "Andrés Gómez", diplomado: "Diplomado en Estrategia Comercial", pago: "pagado", fecha: "2026-01-15", acceso: "activo" },
-    { usuario: "Marcela Díaz", diplomado: "Diplomado en Gestión Financiera", pago: "pendiente", fecha: "—", acceso: "pendiente" },
-    { usuario: "Sofía Naranjo", diplomado: "Diplomado en Liderazgo", pago: "pagado", fecha: "2026-01-20", acceso: "activo" },
-    { usuario: "Camilo Torres", diplomado: "Diplomado en Gestión Financiera", pago: "pagado", fecha: "2025-12-28", acceso: "suspendido" },
-  ],
-  historial: [
-    { fecha: "2026-02-09", tipo: "Retiro", desc: "Solicitud de retiro registrada", estado: "pendiente", monto: -120000 },
-    { fecha: "2026-02-08", tipo: "Retorno", desc: "Utilidad del día hábil aplicada", estado: "activo", monto: 12200 },
-    { fecha: "2026-02-05", tipo: "Referido", desc: "Nuevo referido directo registrado", estado: "activo", monto: 0 },
-    { fecha: "2026-01-20", tipo: "Diplomado", desc: "Pago de diplomado confirmado", estado: "pagado", monto: -350000 },
-    { fecha: "2026-01-12", tipo: "Ganancia", desc: "Ganancia asignada tras revisión", estado: "activo", monto: 500000 },
-  ],
-  notificaciones: [
-    { icon: "bi-check-circle", acc: "acc-green", titulo: "Ganancia aprobada", texto: "GAN-3004 fue aprobada correctamente", t: "hace 12 min" },
-    { icon: "bi-cash-stack", acc: "acc-gold", titulo: "Retiro pendiente", texto: "RET-7001 requiere revisión", t: "hace 40 min" },
-    { icon: "bi-graph-up-arrow", acc: "acc-petrol", titulo: "Utilidad semanal cargada", texto: "Semana del 09 al 13 de febrero", t: "hace 2 h" },
-    { icon: "bi-person-plus", acc: "acc-carbon", titulo: "Nuevo referido registrado", texto: "Valentina Ruiz sumó un referido", t: "hace 5 h" },
-    { icon: "bi-mortarboard", acc: "acc-green", titulo: "Pago de diplomado confirmado", texto: "Andrés Gómez activó su acceso", t: "ayer" },
-  ],
-  // Referral tree (root = patrocinador)
-  arbol: {
-    nombre: "Laura Restrepo", id: "U-1042", cupos: 4, hijos: [
-      { nombre: "Valentina Ruiz", id: "U-1048", cupos: 2, tipo: "directo", hijos: [
-        { nombre: "Pedro Lince", id: "U-1101", cupos: 1, tipo: "directo", hijos: [] },
-        { nombre: "Ana María Soto", id: "U-1102", cupos: 0, tipo: "directo", hijos: [] },
-      ]},
-      { nombre: "Andrés Gómez", id: "U-1043", cupos: 3, tipo: "directo", hijos: [
-        { nombre: "Carlos Mejía", id: "U-1110", cupos: 0, tipo: "directo", hijos: [] },
-        { nombre: "Diana Quintero", id: "U-1111", cupos: 1, tipo: "directo", hijos: [
-          { nombre: "Felipe Ortiz", id: "U-1120", cupos: 0, tipo: "directo", hijos: [] },
-        ]},
-        { nombre: "Jorge Niño", id: "U-1112", cupos: 0, tipo: "directo", hijos: [] },
-      ]},
-      { nombre: "Javier Silva", id: "U-1130", cupos: 0, tipo: "cedido", cesion: "3ro", de: "Valentina Ruiz", hijos: [] },
-      { nombre: "Marta Ríos", id: "U-1131", cupos: 0, tipo: "cedido", cesion: "6to", de: "Andrés Gómez", hijos: [] },
-    ]
-  },
+let DB = window.__INITIAL_DB__ || {
+  usuarios: [], solicitudes: [], retiros: [], utilidades: [], historial: [], notificaciones: [], escuela: [],
+  arbol: { nombre: "Sin red", id: "", cupos: 0, hijos: [] },
   festivos: ["2026-01-01 · Año Nuevo", "2026-01-06 · Reyes Magos", "2026-03-23 · San José", "2026-05-01 · Día del Trabajo"],
   config: { gananciaPct: 2, moodle: "https://escuela.plataformainversion.co", wompi: "activo", moneda: "COP", retiroMin: 50000, retiroMax: 2000000 },
 };
@@ -730,12 +659,14 @@ function openUserModal(id) {
     </div>`, "lg");
 }
 function adminApproveUser(id) {
+  fetch('/api/actions', { method: 'POST', body: JSON.stringify({ action: 'approveUser', payload: { id } }) });
   const u = DB.usuarios.find(x => x.id === id); if (!u) return;
   u.estado = "activo";
   if ($("#viewBody") && state.view === "usuarios") { $("#viewBody").innerHTML = VIEWS.admin_usuarios(); window.after_admin_usuarios(); }
   toast("Usuario aprobado", u.nombre + " ahora está activo");
 }
 function adminBlockUser(id) {
+  fetch('/api/actions', { method: 'POST', body: JSON.stringify({ action: 'blockUser', payload: { id } }) });
   const u = DB.usuarios.find(x => x.id === id); if (!u) return;
   u.estado = "bloqueado";
   if ($("#viewBody") && state.view === "usuarios") { $("#viewBody").innerHTML = VIEWS.admin_usuarios(); window.after_admin_usuarios(); }
