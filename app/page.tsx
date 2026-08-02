@@ -26,7 +26,13 @@ export default async function Page() {
     supabase.from('escuela').select('*')
   ])
 
-  const usuarios = perfiles || []
+  // Map perfiles to match what app.js expects (correo, ref, fecha)
+  const usuarios = perfiles?.map(p => ({
+    ...p,
+    correo: p.email,
+    ref: p.ref_count,
+    fecha: p.fecha_registro
+  })) || []
   
   // Construir el árbol de referidos de forma recursiva (basado en referrals)
   const buildTree = (userId: string): any => {
@@ -49,14 +55,52 @@ export default async function Page() {
   // Raíz del árbol: Laura Restrepo (la ID de prueba asignada en el script SQL)
   const arbol = buildTree('00000000-0000-0000-0000-000000000002') || { nombre: "Sin red", id: "", cupos: 0, hijos: [] }
 
+  // Map solicitudes
+  const solicitudesMap = solicitudes?.map(s => {
+    const u = usuarios.find(x => x.id === s.user_id)
+    return {
+      ...s,
+      usuario: u ? u.nombre : 'Desconocido',
+      doc: u ? u.doc : '',
+      cuenta: u ? `${u.banco} ${u.cuenta}` : ''
+    }
+  }) || []
+
+  // Map retiros
+  const retirosMap = retiros?.map(r => {
+    const u = usuarios.find(x => x.id === r.user_id)
+    return {
+      ...r,
+      usuario: u ? u.nombre : 'Desconocido'
+    }
+  }) || []
+
+  const escuelaMap = escuela?.map(e => {
+    const u = usuarios.find(x => x.id === e.user_id)
+    return {
+      ...e,
+      usuario: u ? u.nombre : 'Desconocido'
+    }
+  }) || []
+
+  const notificacionesMap = notificaciones?.map(n => ({
+    ...n,
+    t: n.tiempo || 'reciente'
+  })) || []
+
+  const historialMap = historial?.map(h => ({
+    ...h,
+    desc: h.descrip
+  })) || []
+
   const initialDB = {
     usuarios,
-    solicitudes: solicitudes || [],
-    retiros: retiros || [],
+    solicitudes: solicitudesMap,
+    retiros: retirosMap,
     utilidades: utilidades || [],
-    historial: historial || [],
-    notificaciones: notificaciones || [],
-    escuela: escuela || [],
+    historial: historialMap,
+    notificaciones: notificacionesMap,
+    escuela: escuelaMap,
     arbol,
     festivos: ["2026-01-01 · Año Nuevo", "2026-01-06 · Reyes Magos", "2026-03-23 · San José", "2026-05-01 · Día del Trabajo"],
     config: { gananciaPct: 2, moodle: "https://escuela.plataformainversion.co", wompi: "activo", moneda: "COP", retiroMin: 50000, retiroMax: 2000000 }
